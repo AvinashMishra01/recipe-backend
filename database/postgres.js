@@ -1,24 +1,11 @@
-// import { Pool } from "pg";
-
-//   const pool = new Pool({
-//   user: process.env.USER_NAME ,  //|| "postgres",
-//   password: process.env.DB_PASSWORD, // || "root",
-//   host: process.env.HOST_NAME,// || "localhost",
-//   port: process.env.DB_PORT, // || 5432,
-//   database:process.env.DB_NAME, // "new_db",
-// });
-
-// export default pool;
-
-import { release } from "os";
 import { Pool } from "pg";
 
 export const pool = new Pool({
-  user: process.env.USER_NAME, //|| "postgres",
-  password: process.env.DB_PASSWORD, // || "root",
-  host: process.env.HOST_NAME, // || "localhost",
-  port: process.env.DB_PORT, // || 5432,
-  database: process.env.DB_NAME, // "new_db",
+  user: process.env.USER_NAME,
+  password: process.env.DB_PASSWORD,
+  host: process.env.HOST_NAME,
+  port: process.env.DB_PORT,
+  database: process.env.DB_NAME,
 });
 
 export default async function dbConnect() {

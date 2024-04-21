@@ -1,17 +1,28 @@
+// for local database
+// import { pool } from "@/database/postgres";
+// import dbConnect from "@/database/postgres";
+
+// for vercel database
+import { db } from "@vercel/postgres";
+
 import { NextRequest, NextResponse } from "next/server";
-import { pool } from "@/database/postgres";
-import dbConnect from "@/database/postgres";
 export const GET = async (req: NextRequest) => {
   const urlParts = req.url ? req.url.split("/") : [];
   const recipeId = urlParts[5];
   try {
-    await dbConnect();
-    // const client = await pool.connect();
-    // const result = await client.query(
-    const result = await pool.query(
+    // for vercel
+    const client = await db.connect();
+    const result = await client.query(
       "SELECT * FROM recipedatabase WHERE id = $1",
       [recipeId]
     );
+
+    //  for local
+    // await dbConnect();
+    // const result = await pool.query(
+    //   "SELECT * FROM recipedatabase WHERE id = $1",
+    //   [recipeId]
+    // );
 
     if (result.rows.length === 0) {
       return NextResponse.json(
@@ -33,7 +44,7 @@ export const GET = async (req: NextRequest) => {
   }
 };
 
-export const date = async () => {
+export const createRecipeDate = async () => {
   let today = new Date();
   let dd = String(today.getDate()).padStart(2, "0");
   let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
@@ -48,18 +59,25 @@ export const PUT = async (
   let body = await req.json();
   let recipeId = params.id;
   const { recipe_name, ingredients, instructions } = body;
-  let today = date();
+  let today = await createRecipeDate();
   try {
-    await dbConnect();
-    // const client = await pool.connect();
-    // const result = await client.query(
-    const result = await pool.query(
+    // for vercel
+    console.log("date is ", today);
+    const client = await db.connect();
+    const result = await client.query(
       "UPDATE recipedatabase SET recipe_name=$1, ingredients=$2, instructions=$3, date=$4 WHERE id=$5 RETURNING *",
       [recipe_name, ingredients, instructions, today, recipeId]
     );
 
-    console.log("result is ", result);
-    if (result.rowsCount === 0) {
+    // for local
+    // await dbConnect();
+    // const result = await pool.query(
+    //   "UPDATE recipedatabase SET recipe_name=$1, ingredients=$2, instructions=$3, date=$4 WHERE id=$5 RETURNING *",
+    //   [recipe_name, ingredients, instructions, today, recipeId]
+    // );
+
+    console.log("result is  upfate", result);
+    if (result.rowCount === 0) {
       return NextResponse.json(
         { data: "Recipe not Not Update", erorr: true },
         { status: 200 }
@@ -85,8 +103,17 @@ export const DELETE = async (
 ) => {
   const recipeId = params.id;
   try {
-    const client = await pool.connect();
-    await client.query("DELETE FROM recipedatabase WHERE id=$1", [recipeId]);
+    // for vercel
+    const client = await db.connect();
+    const result = await client.query(
+      "DELETE FROM recipedatabase WHERE id=$1",
+      [recipeId]
+    );
+    console.log("result is for delete ----- ", result);
+    // for local
+    // await dbConnect();
+    // await pool.query("DELETE FROM recipedatabase WHERE id=$1", [recipeId]);
+
     return NextResponse.json(
       { data: "Recipe Deleted Successfully", error: false },
       { status: 200 }

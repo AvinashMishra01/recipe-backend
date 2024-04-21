@@ -1,14 +1,22 @@
-import { pool } from "@/database/postgres";
-import dbConnect from "@/database/postgres";
+// for local postgress sql
+// import { pool } from "@/database/postgres";
+// import dbConnect from "@/database/postgres";
+
+// for vercel postgres sql
+import { db } from "@vercel/postgres";
+
 import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
-import { date } from "../../api/recipe/[id]/route";
+import { createRecipeDate } from "../../api/recipe/[id]/route";
 export const GET = async (req: NextApiRequest) => {
   try {
-    // const client = await pool.connect();
-    await dbConnect();
-    const result = await pool.query("select * from recipedatabase");
-    // console.log("result is ", result);
+    // for vercel
+    const client = await db.connect();
+    const result = await client.query("select * from recipedatabase");
+
+    // for local
+    // await dbConnect();
+    // const result = await pool.query("select * from recipedatabase");
     return NextResponse.json({ data: result.rows }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ erorr: "No api call" }, { status: 500 });
@@ -18,19 +26,26 @@ export const GET = async (req: NextApiRequest) => {
 export const POST = async (req: NextRequest) => {
   try {
     let body = await req.json();
-    let today = await date();
+    let today = await createRecipeDate();
     console.log("post in main route", body, today);
     const { recipe_name, ingredients, instructions } = body;
-    await dbConnect();
-    // const client = await pool.connect();
 
-    const result = await pool.query(
+    //for vercel
+    const client = await db.connect();
+    const result = await client.query(
       "insert into recipedatabase (recipe_name, ingredients, instructions, date) values ($1, $2, $3, $4) returning *",
       [recipe_name, ingredients, instructions, today]
     );
-    console.log("save data -------------", result);
 
-    if (result.rowsCount === 0) {
+    // for local
+    // await dbConnect();
+    // const result = await pool.query(
+    //   "insert into recipedatabase (recipe_name, ingredients, instructions, date) values ($1, $2, $3, $4) returning *",
+    //   [recipe_name, ingredients, instructions, today]
+    // );
+    console.log("save data -------------", result);
+    // * Note if you are using the local then chage the condition=>   (result.rowsCount === 0)
+    if (result.rowCount === 0) {
       return NextResponse.json(
         { data: "Recipe not save ", error: true },
         { status: 400 }
