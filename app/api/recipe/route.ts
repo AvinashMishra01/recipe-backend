@@ -7,7 +7,15 @@ import { db } from "@vercel/postgres";
 
 import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
-import { createRecipeDate } from "../../api/recipe/[id]/route";
+import createRecipeDate from "@/utils/helper";
+// const createRecipeDate = async () => {
+//   let today = new Date();
+//   let dd = String(today.getDate()).padStart(2, "0");
+//   let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+//   let yyyy = today.getFullYear();
+//   return yyyy + "-" + mm + "-" + dd;
+// };
+
 export const GET = async (req: NextApiRequest) => {
   try {
     // for vercel
