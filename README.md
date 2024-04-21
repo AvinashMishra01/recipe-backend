@@ -2,8 +2,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-#Make the .env.local
-* for the local Postgres SQL use to make your own .env.local and config it with these credentials:
+# Make the .env.local
+* for the local Postgres SQL use make your own .env.local and config it with these credentials:
 
 USER_NAME= "postgres"
 DB_PASSWORD= "< Your Password"
@@ -11,7 +11,7 @@ HOST_NAME= "localhost"
 DB_PORT= "5432" // default port 
 DB_NAME= "<Your Database Name "
 
-** Make the table name recipedatabase inside this and make the col name 
+* Make the table name recipedatabase inside this and make the col name 
 id-> primary autoincrement ;
 recipe_name: varchar
 instruction; varchar
