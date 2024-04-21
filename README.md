@@ -11,13 +11,13 @@ HOST_NAME= "localhost"
 DB_PORT= "5432" // default port 
 DB_NAME= "<Your Database Name "
 
-* Make the table name recipedatabase inside this and make the col name 
+* Make the table name recipedatabase inside your Database and make sure onc the col name 
 id-> primary autoincrement ;
 recipe_name: varchar
 instruction; varchar
 ingredients: varchar
 data: date
-
+  or use this commond 
 ## SQL command :
 CREATE TABLE recipedatabase (
     id SERIAL PRIMARY KEY,
