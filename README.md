@@ -2,6 +2,35 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+#Make the .env.local
+* for the local Postgres SQL use to make your own .env.local and config it with these credentials:
+
+USER_NAME= "postgres"
+DB_PASSWORD= "< Your Password"
+HOST_NAME= "localhost"
+DB_PORT= "5432" // default port 
+DB_NAME= "<Your Database Name "
+
+** Make the table name recipedatabase inside this and make the col name 
+id-> primary autoincrement ;
+recipe_name: varchar
+instruction; varchar
+ingredients: varchar
+data: date
+
+## SQL command :
+CREATE TABLE recipedatabase (
+    id SERIAL PRIMARY KEY,
+    recipe_name VARCHAR(255),
+    instructions VARCHAR(1024),
+    ingredients VARCHAR(1024),
+    date DATE
+);
+
+## Run the application 
+now run the application with the command: "npm run dev" 
+* Ensure that it's running on 3000 otherwise you have to change the angular mainUrl in the service 
+
 First, run the development server:
 
 ```bash
